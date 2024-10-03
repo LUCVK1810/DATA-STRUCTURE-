@@ -1,35 +1,47 @@
 #include <stdio.h>
-#define MAX_VERTICES 100   
-void genAdjMat(int adjMatrix[MAX_VERTICES][MAX_VERTICES], int numVertices, int numEdges) {
-    int i, j;
-    for (i = 0; i < numVertices; i++) {
-        for (j = 0; j < numVertices; j++) {
-            adjMatrix[i][j] = 0;
-        }
-    }
-    for (i = 0; i < numEdges; i++) {
-        int src, dest;
-        printf("Enter edge %d (source destination): ", i + 1);
-        scanf("%d %d", &src, &dest);
-        adjMatrix[src][dest] = 1;  // Set matrix[src][dest] = 1 to indicate an edge from src to dest
-        adjMatrix[dest][src] = 1;  // For an undirected graph, set matrix[dest][src] = 1 as well
-    }
-    printf("\nAdjacency Matrix:\n");
-    for (i = 0; i < numVertices; i++) {
-        for (j = 0; j < numVertices; j++) {
-            printf("%d ", adjMatrix[i][j]);
-        }
-        printf("\n");
-    }
+#include <stdlib.h>
+void main()
+{
+int **adjmatrix;
+int r, c, v;
+printf ("Number of vertices: ");
+scanf ("%d", &v);
+adjmatrix=(int **) malloc (sizeof(int **)*v); 
+for (r= 0; r<v; r++)
+{
+adjmatrix[r] = (int*) malloc(sizeof(int)*v); 
 }
-void main() {
-    int adjMatrix[MAX_VERTICES][MAX_VERTICES];
-    int numVertices, numEdges;
-clrscr();
-    printf("Enter the number of vertices: ");
-    scanf("%d", &numVertices);
-    printf("Enter the number of edges: ");
-    scanf("%d", &numEdges);
-    genAdjMat(adjMatrix, numVertices, numEdges);
-   getch();
+ for (r= 0; r<v; r++)
+{ 
+for (c=0; c < v; c++) 
+{
+adjmatrix[r][c] = 0;
+}
+getch();
+}
+r = 0;
+c=0;
+printf ("Enter edge Pair V1 V2\n");
+printf ("Press -1 -1 to exit\n");
+do
+{
+printf ("Enter Pair: ");
+scanf ("%d %d", &r, &c);
+if (r> 0 && r<=v && c > 0 && c <= v)
+{ 
+adjmatrix[r-1][c-1] = 1; 
+}
+}while(r > 0 && c > 0);
+printf("\nAdjacency matrix\n");
+printf(" ");
+printf("\n");
+for (r = 0; r < v; r++)
+{
+for(c=0;c<v;c++)
+{
+printf("%d ",adjmatrix[r][c]);
+}
+printf("\n");
+}
+getch();
 }
