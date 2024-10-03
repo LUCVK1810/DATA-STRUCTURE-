@@ -1,51 +1,72 @@
-#include <stdio.h>
-#include <limits.h>
-#define MAX_VERTICES 100
-#define INF INT_MAX
-int minDistance(int dist[], int sptSet[], int numVertices) {
-    int min = INF, minIndex;
-    for (int v = 0; v < numVertices; v++)
-        if (sptSet[v] == 0 && dist[v] <= min)
-            min = dist[v], minIndex = v;
-    return minIndex;
+#include<stdio.h>
+#define INF 999
+#define size 10
+void dijkstra(int A[size][size],int n,int s);
+void main(){
+int A[size][size],i,j,n,u;   
+clrscr();
+printf("Enter no. of vertices:"); //([5][5]0 10 3 0 0,0 0 1 2 0,0 4 0 8 2,0 0 0 0 7,0 0 0 9 0)
+scanf("%d",&n);
+printf("\n Enter the adjacency matrix:\n");
+for(i=0;i<n;i++)
+  for(j=0;j<n;j++)
+  scanf("%d",&A[i][j]);
+printf("\nEnter the strating node:");
+scanf("%d",&u);
+dijkstra(A,n,u);
+getch();
 }
-void printSol(int dist[], int numVertices) {
-    printf("Vertex \t\t Distance from Source\n");
-    for (int i = 0; i < numVertices; i++)
-        printf("%d \t\t %d\n", i, dist[i]);
-}
-void dijkstra(int graph[MAX_VERTICES][MAX_VERTICES], int src, int numVertices) {
-    int dist[MAX_VERTICES];  
-    int sptSet[MAX_VERTICES];
-    for (int i = 0; i < numVertices; i++)
-        dist[i] = INF, sptSet[i] = 0;
-    dist[src] = 0;
-    for (int count = 0; count < numVertices - 1; count++) {
-        int u = minDistance(dist, sptSet, numVertices);
-        sptSet[u] = 1;
-        for (int v = 0; v < numVertices; v++)
-            if (!sptSet[v] && graph[u][v] && dist[u] != INF && dist[u] + graph[u][v] < dist[v])
-                dist[v] = dist[u] + graph[u][v];
+void dijkstra(int A[size][size],int n,int s)
+{
+   int cost[size][size],dist[size],parent[size];
+   int visited[size],count,mindist,next,i,j;
+   for(i=0;i<n;i++)
+   {
+    for(j=0;j<n;j++)
+    {
+     if(A[i][j]==0)
+       cost[i][j]=INF;
+     else
+	cost[i][j]=A[i][j];
     }
-    printSol(dist, numVertices);
-}
-int main() {
-    int graph[MAX_VERTICES][MAX_VERTICES], numVertices;
-    clrscr();
-    printf("Enter the number of vertices: ");
-    scanf("%d", &numVertices);
-    printf("Enter the adjacency matrix (use 0 for no direct edge):\n");
-    for (int i = 0; i < numVertices; i++) {
-        for (int j = 0; j < numVertices; j++) {
-            scanf("%d", &graph[i][j]);
-            if (graph[i][j] == 0 && i != j) {
-                graph[i][j] = INF; // Set INF for no direct edge between vertices
-            }
-        }
-    }
-    int src;
-    printf("Enter the source vertex: ");
-    scanf("%d", &src);
-    dijkstra(graph, src, numVertices);
-   getch();
+   }
+  for(i=0;i<n;i++)
+  {
+  dist[i]=cost[s][i];
+  parent[i]=s;
+  visited[i]=0;
+  }
+  dist[s]=0;
+  visited[i]=0;
+  count=1;
+  while(count<n-1)
+   {
+   mindist=INF;
+   for(i=0;i<n;i++)
+   if(dist[i]<mindist&&!visited[i])
+    {
+     mindist=dist[i];
+     next=i;
+     }
+     visited[next]=1;
+     for(i=0;i<n;i++)
+     if(!visited[i])
+     if(mindist+cost[next][i]<dist[i])
+     {
+      dist[i]=mindist+cost[next][i];
+      parent[i]=next;
+      }
+      count++;
+      }
+      for(i=0;i<n;i++)
+       {
+	printf("\n Distance of node %d=%d",i,dist[i]);
+	printf("\n Path=%d",i);
+	j=i;
+	do{
+	 j=parent[j];
+	 printf("<-%d",j);
+	 }while(j!=s);
+	 printf("\n");
+	 }
 }
